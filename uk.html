@@ -1,0 +1,2353 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procediment Regne Unit · Amenities Pack</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800;9..144,900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ============================================
+           SISTEMA DE DISSENY
+           Mateix sistema que la home per garantir coherència visual.
+           Si canviem un color a la home, també s'ha d'actualitzar aquí
+           (en futures versions amb Astro això es centralitzarà).
+        ============================================ */
+        :root {
+            --color-brand: #1a4d4a;
+            --color-brand-light: #2d6e69;
+            --color-brand-soft: #e8f1f0;
+            --color-accent: #ed8936;
+            --color-accent-light: #f6ad55;
+            --color-accent-soft: #fef5e7;
+            
+            /* Color específic per a UK (vermell), que serà l'accent d'aquesta pàgina */
+            --color-uk: #c53030;
+            --color-uk-dark: #9b2c2c;
+            --color-uk-soft: #fed7d7;
+            --color-uk-bg: #fff5f5;
+            
+            --color-text: #1a202c;
+            --color-text-soft: #4a5568;
+            --color-text-muted: #718096;
+            --color-bg: #fdfcfb;
+            --color-bg-card: #ffffff;
+            --color-border: #e2e8f0;
+            
+            /* Colors d'estat per al checklist */
+            --color-success: #38a169;
+            --color-success-soft: #c6f6d5;
+            
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --space-12: 3rem;
+            --space-16: 4rem;
+            
+            --radius-sm: 0.5rem;
+            --radius-md: 0.75rem;
+            --radius-lg: 1.25rem;
+            --radius-xl: 2rem;
+            
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
+            --shadow-lg: 0 12px 32px rgba(26, 77, 74, 0.12);
+            --shadow-xl: 0 24px 48px rgba(26, 77, 74, 0.18);
+            
+            --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+            --font-display: 'Fraunces', Georgia, serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 100px;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            color: var(--color-text);
+            background: var(--color-bg);
+            line-height: 1.6;
+            background-image: 
+                radial-gradient(circle at 0% 0%, rgba(197, 48, 48, 0.04) 0%, transparent 40%),
+                radial-gradient(circle at 100% 100%, rgba(26, 77, 74, 0.04) 0%, transparent 40%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ============================================
+           CAPÇALERA (idèntica a la home per coherència)
+        ============================================ */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(253, 252, 251, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .header.scrolled {
+            border-bottom-color: var(--color-border);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: var(--space-4) var(--space-6);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--space-6);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            text-decoration: none;
+            color: var(--color-text);
+            font-weight: 800;
+            font-size: 1.125rem;
+            letter-spacing: -0.02em;
+        }
+
+        .logo-mark {
+            width: 40px;
+            height: 40px;
+            background: var(--color-brand);
+            color: white;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 1.25rem;
+            box-shadow: var(--shadow-md);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .logo:hover .logo-mark {
+            transform: rotate(-8deg) scale(1.05);
+        }
+
+        .nav {
+            display: flex;
+            gap: var(--space-2);
+            align-items: center;
+        }
+
+        .nav-link {
+            padding: var(--space-2) var(--space-4);
+            color: var(--color-text-soft);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            border-radius: var(--radius-sm);
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--color-brand);
+            background: var(--color-brand-soft);
+        }
+
+        .nav-link.active {
+            color: var(--color-uk);
+            background: var(--color-uk-soft);
+        }
+
+        /* ============================================
+           BREADCRUMB (engrunes de pa)
+           Petit indicador de "on ets" dins de la web.
+           Útil quan tinguem moltes pàgines.
+        ============================================ */
+        .breadcrumb {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: calc(80px + var(--space-6)) var(--space-6) 0;
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+        }
+
+        .breadcrumb a {
+            color: var(--color-text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--color-brand);
+        }
+
+        .breadcrumb-current {
+            color: var(--color-text);
+            font-weight: 600;
+        }
+
+        /* ============================================
+           HERO DE PÀGINA INTERNA
+           Aquesta capçalera és diferent de la home: més compacta,
+           amb la informació clau del país a primer cop d'ull.
+        ============================================ */
+        .page-hero {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: var(--space-8) var(--space-6) var(--space-12);
+        }
+
+        .page-hero-card {
+            background: linear-gradient(135deg, var(--color-uk) 0%, var(--color-uk-dark) 100%);
+            border-radius: var(--radius-xl);
+            padding: var(--space-12);
+            color: white;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Patró decoratiu de fons amb la bandera britànica estilitzada */
+        .page-hero-card::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .page-hero-card::after {
+            content: '🇬🇧';
+            position: absolute;
+            font-size: 20rem;
+            right: -50px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.08;
+            line-height: 1;
+            pointer-events: none;
+        }
+
+        .page-hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+        }
+
+        .page-hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-2) var(--space-4);
+            background: rgba(255,255,255,0.15);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: var(--space-4);
+            backdrop-filter: blur(10px);
+        }
+
+        .page-hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+            margin-bottom: var(--space-4);
+        }
+
+        .page-hero-subtitle {
+            font-size: 1.15rem;
+            opacity: 0.9;
+            line-height: 1.6;
+            max-width: 600px;
+            margin-bottom: var(--space-6);
+        }
+
+        /* Targetes d'informació ràpida dins del hero */
+        .quick-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-4);
+            margin-top: var(--space-6);
+        }
+
+        .quick-info-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: var(--space-4);
+            border-radius: var(--radius-md);
+        }
+
+        .quick-info-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0.8;
+            margin-bottom: var(--space-1);
+            font-weight: 600;
+        }
+
+        .quick-info-value {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        /* ============================================
+           LAYOUT PRINCIPAL DE LA PÀGINA
+           Disposició de dues columnes: contingut principal + sidebar
+        ============================================ */
+        .main-layout {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 var(--space-6) var(--space-16);
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: var(--space-12);
+            align-items: start;
+        }
+
+        /* ============================================
+           SIDEBAR DE PROGRÉS
+           Acompanya l'usuari mentre llegeix els passos.
+        ============================================ */
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--color-border);
+        }
+
+        .sidebar-title {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: var(--space-4);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        /* Barra de progrés circular feta amb SVG */
+        .progress-circle-wrapper {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            margin-bottom: var(--space-6);
+            padding-bottom: var(--space-6);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .progress-circle {
+            width: 70px;
+            height: 70px;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .progress-circle svg {
+            transform: rotate(-90deg);
+        }
+
+        .progress-circle-bg {
+            fill: none;
+            stroke: var(--color-border);
+            stroke-width: 6;
+        }
+
+        .progress-circle-fill {
+            fill: none;
+            stroke: var(--color-uk);
+            stroke-width: 6;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 0.6s ease;
+        }
+
+        .progress-circle-text {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1rem;
+            color: var(--color-uk);
+            font-family: var(--font-display);
+        }
+
+        .progress-info-label {
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+            font-weight: 500;
+            margin-bottom: var(--space-1);
+        }
+
+        .progress-info-value {
+            font-weight: 700;
+            color: var(--color-text);
+        }
+
+        /* Llista de salts ràpids als passos */
+        .step-jumps {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-1);
+        }
+
+        .step-jump {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            padding: var(--space-2) var(--space-3);
+            border-radius: var(--radius-sm);
+            text-decoration: none;
+            color: var(--color-text-soft);
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .step-jump:hover {
+            background: var(--color-uk-bg);
+            color: var(--color-uk);
+        }
+
+        .step-jump-number {
+            width: 24px;
+            height: 24px;
+            background: var(--color-border);
+            color: var(--color-text-muted);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .step-jump.completed .step-jump-number {
+            background: var(--color-success);
+            color: white;
+        }
+
+        .step-jump.completed .step-jump-number::before {
+            content: '✓';
+        }
+
+        .step-jump.completed .step-jump-number > span {
+            display: none;
+        }
+
+        .step-jump.completed {
+            color: var(--color-text-muted);
+            text-decoration: line-through;
+            text-decoration-color: var(--color-text-muted);
+            opacity: 0.7;
+        }
+
+        .reset-btn {
+            margin-top: var(--space-4);
+            padding-top: var(--space-4);
+            border-top: 1px solid var(--color-border);
+            background: none;
+            border-bottom: none;
+            border-left: none;
+            border-right: none;
+            color: var(--color-text-muted);
+            font-size: 0.85rem;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            transition: color 0.2s;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .reset-btn:hover {
+            color: var(--color-uk);
+        }
+
+        /* ============================================
+           CONTINGUT PRINCIPAL: PASSOS DEL PROCEDIMENT
+        ============================================ */
+        .content {
+            min-width: 0;
+        }
+
+        .section-header-internal {
+            margin-bottom: var(--space-8);
+        }
+
+        .section-header-internal .section-eyebrow {
+            display: inline-block;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--color-uk);
+            margin-bottom: var(--space-2);
+        }
+
+        .section-header-internal .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(1.75rem, 3vw, 2.5rem);
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            margin-bottom: var(--space-3);
+        }
+
+        .section-header-internal .section-subtitle {
+            font-size: 1.05rem;
+            color: var(--color-text-soft);
+            line-height: 1.6;
+        }
+
+        /* Targetes de pas (l'element central de la pàgina) */
+        .step-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--space-4);
+            box-shadow: var(--shadow-sm);
+            border: 2px solid var(--color-border);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover {
+            box-shadow: var(--shadow-md);
+            border-color: var(--color-uk-soft);
+        }
+
+        .step-card.completed {
+            background: var(--color-success-soft);
+            border-color: var(--color-success);
+            opacity: 0.85;
+        }
+
+        .step-card.completed:hover {
+            opacity: 1;
+        }
+
+        .step-card-header {
+            padding: var(--space-6);
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-4);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        /* Checkbox personalitzat */
+        .step-checkbox {
+            width: 28px;
+            height: 28px;
+            border: 2px solid var(--color-border);
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+            margin-top: 2px;
+        }
+
+        .step-checkbox:hover {
+            border-color: var(--color-uk);
+            transform: scale(1.05);
+        }
+
+        .step-card.completed .step-checkbox {
+            background: var(--color-success);
+            border-color: var(--color-success);
+        }
+
+        .step-checkbox-icon {
+            width: 16px;
+            height: 16px;
+            color: white;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.2s ease;
+        }
+
+        .step-card.completed .step-checkbox-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .step-card-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .step-card-meta {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            margin-bottom: var(--space-2);
+        }
+
+        .step-number-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background: var(--color-uk);
+            color: white;
+            border-radius: 50%;
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 0.85rem;
+        }
+
+        .step-card.completed .step-number-badge {
+            background: var(--color-success);
+        }
+
+        .step-tag {
+            padding: 2px var(--space-2);
+            background: var(--color-uk-bg);
+            color: var(--color-uk);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .step-tag.tag-platform {
+            background: #e6f1fe;
+            color: #1e40af;
+        }
+
+        .step-tag.tag-document {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .step-tag.tag-communication {
+            background: #f3e8ff;
+            color: #6b21a8;
+        }
+
+        .step-card-title {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: var(--space-1);
+            line-height: 1.3;
+        }
+
+        .step-card.completed .step-card-title {
+            text-decoration: line-through;
+            color: var(--color-text-muted);
+        }
+
+        .step-card-summary {
+            color: var(--color-text-soft);
+            font-size: 0.95rem;
+        }
+
+        .step-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background: var(--color-bg);
+            border-radius: 50%;
+            color: var(--color-text-muted);
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .step-card.expanded .step-toggle {
+            background: var(--color-uk);
+            color: white;
+            transform: rotate(180deg);
+        }
+
+        .step-card-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+
+        .step-card.expanded .step-card-body {
+            max-height: 5000px;
+        }
+
+        .step-card-content {
+            padding: 0 var(--space-6) var(--space-6);
+            border-top: 1px solid var(--color-border);
+            padding-top: var(--space-6);
+        }
+
+        .step-card-content h4 {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin: var(--space-4) 0 var(--space-3);
+            color: var(--color-text);
+        }
+
+        .step-card-content h4:first-child {
+            margin-top: 0;
+        }
+
+        .step-card-content p {
+            color: var(--color-text-soft);
+            margin-bottom: var(--space-3);
+        }
+
+        .step-card-content ul {
+            list-style: none;
+            padding-left: 0;
+            margin-bottom: var(--space-4);
+        }
+
+        .step-card-content ul li {
+            position: relative;
+            padding-left: var(--space-6);
+            margin-bottom: var(--space-2);
+            color: var(--color-text-soft);
+        }
+
+        .step-card-content ul li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--color-uk);
+            font-weight: 700;
+        }
+
+        .step-card-content strong {
+            color: var(--color-text);
+            font-weight: 700;
+        }
+
+        /* Caixes d'avís especials */
+        .callout {
+            padding: var(--space-4);
+            border-radius: var(--radius-md);
+            margin: var(--space-4) 0;
+            display: flex;
+            gap: var(--space-3);
+            align-items: flex-start;
+        }
+
+        .callout-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            line-height: 1;
+        }
+
+        .callout-content {
+            flex: 1;
+        }
+
+        .callout-title {
+            font-weight: 700;
+            margin-bottom: var(--space-1);
+        }
+
+        .callout-text {
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .callout-warning {
+            background: #fef5e7;
+            border: 1px solid #f6ad55;
+        }
+
+        .callout-warning .callout-title {
+            color: #c05621;
+        }
+
+        .callout-warning .callout-text {
+            color: #7c2d12;
+        }
+
+        .callout-info {
+            background: #e6f1fe;
+            border: 1px solid #93c5fd;
+        }
+
+        .callout-info .callout-title {
+            color: #1e40af;
+        }
+
+        .callout-info .callout-text {
+            color: #1e3a8a;
+        }
+
+        .callout-tip {
+            background: var(--color-success-soft);
+            border: 1px solid var(--color-success);
+        }
+
+        .callout-tip .callout-title {
+            color: #22543d;
+        }
+
+        .callout-tip .callout-text {
+            color: #22543d;
+        }
+
+        /* Botó d'enllaç extern (com ara CUDOS) */
+        .external-link {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-3) var(--space-4);
+            background: var(--color-brand);
+            color: white;
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            margin: var(--space-2) 0;
+        }
+
+        .external-link:hover {
+            background: var(--color-brand-light);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Bloc de codi monoespai per a credencials, etc. */
+        .code-block {
+            background: var(--color-text);
+            color: #e2e8f0;
+            padding: var(--space-4);
+            border-radius: var(--radius-md);
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            margin: var(--space-3) 0;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-block-label {
+            color: #ed8936;
+            font-weight: 700;
+            margin-right: var(--space-2);
+        }
+
+        .credentials-table {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: var(--space-2) var(--space-4);
+            background: var(--color-bg);
+            padding: var(--space-4);
+            border-radius: var(--radius-md);
+            margin: var(--space-3) 0;
+            border: 1px solid var(--color-border);
+        }
+
+        .credentials-table dt {
+            font-weight: 700;
+            color: var(--color-text-soft);
+            font-size: 0.875rem;
+        }
+
+        .credentials-table dd {
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            color: var(--color-text);
+        }
+
+        /* ============================================
+           SECCIÓ DE CONTACTES
+        ============================================ */
+        .contacts-section {
+            margin-top: var(--space-16);
+        }
+
+        .contacts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space-4);
+            margin-top: var(--space-6);
+        }
+
+        .contact-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            border: 1px solid var(--color-border);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+        }
+
+        .contact-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+            border-color: var(--color-uk-soft);
+        }
+
+        .contact-org {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-1) var(--space-3);
+            background: var(--color-uk-bg);
+            color: var(--color-uk);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            align-self: flex-start;
+            margin-bottom: var(--space-2);
+        }
+
+        .contact-org.org-hellmann {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .contact-name {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--color-text);
+        }
+
+        .contact-role {
+            color: var(--color-text-soft);
+            font-size: 0.9rem;
+            margin-bottom: var(--space-3);
+        }
+
+        .contact-email {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            color: var(--color-brand);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            word-break: break-all;
+            transition: color 0.2s;
+        }
+
+        .contact-email:hover {
+            color: var(--color-uk);
+            text-decoration: underline;
+        }
+
+        /* ============================================
+           PEU DE PÀGINA (idèntic a la home)
+        ============================================ */
+        .footer {
+            background: var(--color-text);
+            color: white;
+            padding: var(--space-16) var(--space-6) var(--space-8);
+            margin-top: var(--space-16);
+        }
+
+        .footer-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: var(--space-8);
+            margin-bottom: var(--space-12);
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            margin-bottom: var(--space-4);
+            font-weight: 800;
+            font-size: 1.125rem;
+        }
+
+        .footer-brand .logo-mark {
+            background: var(--color-accent);
+        }
+
+        .footer-tagline {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            max-width: 320px;
+        }
+
+        .footer-col-title {
+            font-weight: 700;
+            margin-bottom: var(--space-4);
+            font-size: 0.95rem;
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+        }
+
+        .footer-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--color-accent-light);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: var(--space-6);
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.85rem;
+        }
+
+        /* ============================================
+           BOTÓ "TORNAR A L'INICI"
+           Apareix flotant a la part inferior dreta.
+        ============================================ */
+        .back-to-top {
+            position: fixed;
+            bottom: var(--space-6);
+            right: var(--space-6);
+            width: 50px;
+            height: 50px;
+            background: var(--color-brand);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-lg);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            z-index: 50;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .back-to-top:hover {
+            background: var(--color-brand-light);
+            transform: translateY(-4px);
+        }
+
+        /* ============================================
+           BARRA DE CELEBRACIÓ EN COMPLETAR
+        ============================================ */
+        .celebration {
+            position: fixed;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-200px);
+            background: var(--color-success);
+            color: white;
+            padding: var(--space-4) var(--space-6);
+            border-radius: var(--radius-lg);
+            font-weight: 700;
+            box-shadow: var(--shadow-xl);
+            z-index: 200;
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+
+        .celebration.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ============================================
+           SECCIÓ DOCUMENTS NECESSARIS
+           Targeta visualment destacada amb accés ràpid
+           a totes les descàrregues necessàries.
+        ============================================ */
+        .docs-quick-access {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 var(--space-6) var(--space-12);
+        }
+
+        .docs-card {
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: var(--space-8);
+            border: 2px solid var(--color-uk-soft);
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Patró decoratiu de fons (cercles vermellosos suaus) */
+        .docs-card::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(197, 48, 48, 0.05) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .docs-card-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            margin-bottom: var(--space-4);
+            position: relative;
+        }
+
+        .docs-card-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--color-uk-bg);
+            color: var(--color-uk);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .docs-card-eyebrow {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--color-uk);
+            margin-bottom: 2px;
+        }
+
+        .docs-card-title {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--color-text);
+            line-height: 1.2;
+        }
+
+        .docs-card-description {
+            color: var(--color-text-soft);
+            margin-bottom: var(--space-6);
+            font-size: 0.95rem;
+            position: relative;
+        }
+
+        /* Grid d'elements descarregables */
+        .docs-quick-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: var(--space-3);
+            margin-bottom: var(--space-6);
+            position: relative;
+        }
+
+        .docs-quick-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            padding: var(--space-4);
+            background: var(--color-bg);
+            border: 1.5px solid var(--color-border);
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            color: var(--color-text);
+            transition: all 0.25s ease;
+            cursor: pointer;
+        }
+
+        .docs-quick-item:hover {
+            background: white;
+            border-color: var(--color-uk);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .docs-quick-icon {
+            width: 36px;
+            height: 36px;
+            background: white;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-uk);
+            flex-shrink: 0;
+            border: 1px solid var(--color-border);
+        }
+
+        .docs-quick-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .docs-quick-name {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--color-text);
+            margin-bottom: 2px;
+        }
+
+        .docs-quick-format {
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+        }
+
+        .docs-quick-arrow {
+            color: var(--color-text-muted);
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .docs-quick-item:hover .docs-quick-arrow {
+            color: var(--color-uk);
+            transform: translateY(2px);
+        }
+
+        .docs-card-link {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            color: var(--color-brand);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .docs-card-link:hover {
+            color: var(--color-brand-light);
+            gap: var(--space-3);
+        }
+
+        /* ============================================
+           SECCIÓ BONES PRÀCTIQUES
+           Format diferent dels passos: targetes amb 
+           números grans i citacions perquè es percebin
+           com a recomanacions, no com a passos obligatoris.
+        ============================================ */
+        .best-practices {
+            margin-top: var(--space-16);
+        }
+
+        .practices-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: var(--space-6);
+            margin-top: var(--space-6);
+        }
+
+        .practice-card {
+            background: linear-gradient(135deg, var(--color-accent-soft) 0%, white 100%);
+            border-radius: var(--radius-lg);
+            padding: var(--space-8);
+            border: 2px solid var(--color-accent-light);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .practice-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Número gran al fons de la targeta */
+        .practice-card::before {
+            content: attr(data-number);
+            position: absolute;
+            top: -20px;
+            right: -10px;
+            font-family: var(--font-display);
+            font-size: 9rem;
+            font-weight: 900;
+            color: var(--color-accent);
+            opacity: 0.12;
+            line-height: 1;
+            pointer-events: none;
+        }
+
+        .practice-card-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--color-accent);
+            color: white;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: var(--space-4);
+            box-shadow: var(--shadow-md);
+            position: relative;
+        }
+
+        .practice-card-eyebrow {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--color-accent);
+            margin-bottom: var(--space-2);
+            position: relative;
+        }
+
+        .practice-card-title {
+            font-family: var(--font-display);
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--color-text);
+            line-height: 1.3;
+            margin-bottom: var(--space-3);
+            position: relative;
+        }
+
+        .practice-card-text {
+            color: var(--color-text-soft);
+            line-height: 1.6;
+            font-size: 0.95rem;
+            position: relative;
+        }
+
+        .practice-card-text strong {
+            color: var(--color-text);
+            font-weight: 700;
+        }
+
+        @media (max-width: 968px) {
+            .docs-quick-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .practices-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ============================================
+           RESPONSIVE
+        ============================================ */
+        @media (max-width: 968px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: relative;
+                top: 0;
+                order: -1;
+            }
+
+            .footer-inner {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .page-hero-card {
+                padding: var(--space-8);
+            }
+
+            .page-hero-card::after {
+                font-size: 12rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .nav {
+                display: none;
+            }
+
+            .footer-inner {
+                grid-template-columns: 1fr;
+            }
+
+            .step-card-header {
+                padding: var(--space-4);
+            }
+
+            .step-card-content {
+                padding-left: var(--space-4);
+                padding-right: var(--space-4);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CAPÇALERA -->
+    <header class="header" id="header">
+        <div class="header-inner">
+            <a href="index.html" class="logo">
+                <div class="logo-mark">A</div>
+                <span>Amenities Pack <span style="color: var(--color-text-muted); font-weight: 500;">· Exportacions</span></span>
+            </a>
+            <nav class="nav" id="nav">
+                <a href="index.html#paisos" class="nav-link">Procediments</a>
+                <a href="uk.html" class="nav-link active">Regne Unit</a>
+                <a href="recursos.html" class="nav-link">Recursos</a>
+                <a href="index.html#consells" class="nav-link">Consells</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- BREADCRUMB -->
+    <nav class="breadcrumb" aria-label="Navegació">
+        <a href="index.html">Inici</a>
+        <span>›</span>
+        <a href="index.html#paisos">Procediments</a>
+        <span>›</span>
+        <span class="breadcrumb-current">Regne Unit</span>
+    </nav>
+
+    <!-- HERO DE PÀGINA -->
+    <section class="page-hero">
+        <div class="page-hero-card">
+            <div class="page-hero-content">
+                <div class="page-hero-eyebrow">
+                    🇬🇧 Procediment d'exportació
+                </div>
+                <h1 class="page-hero-title">Regne Unit</h1>
+                <p class="page-hero-subtitle">
+                    Procediment complet per a exportacions a BUNZL UK (Tamworth · Bunzl Catering Services). Inclou la facturació, la generació de documents CUDOS, la declaració a la plataforma i la coordinació amb Hellmann.
+                </p>
+
+                <div class="quick-info">
+                    <div class="quick-info-card">
+                        <div class="quick-info-label">Client</div>
+                        <div class="quick-info-value">F-BUNZL UK</div>
+                    </div>
+                    <div class="quick-info-card">
+                        <div class="quick-info-label">Magatzem destí</div>
+                        <div class="quick-info-value">Tamworth · Bunzl Catering Services</div>
+                    </div>
+                    <div class="quick-info-card">
+                        <div class="quick-info-label">Operador logístic</div>
+                        <div class="quick-info-value">Hellmann</div>
+                    </div>
+                    <div class="quick-info-card">
+                        <div class="quick-info-label">Plataforma duana</div>
+                        <div class="quick-info-value">CUDOS</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SECCIÓ DOCUMENTS NECESSARIS
+         Accés ràpid a totes les descàrregues abans de començar.
+    ============================================ -->
+    <section class="docs-quick-access">
+        <div class="docs-card">
+            <div class="docs-card-header">
+                <div class="docs-card-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                </div>
+                <div>
+                    <span class="docs-card-eyebrow">Abans de començar</span>
+                    <h2 class="docs-card-title">Documents necessaris</h2>
+                </div>
+            </div>
+            <p class="docs-card-description">
+                Descarrega tots els documents que necessitaràs durant el procediment. Tenir-los a mà abans de començar t'estalviarà temps i interrupcions.
+            </p>
+            <div class="docs-quick-grid">
+                <a href="recursos/plantilla-cudos.xlsx" download class="docs-quick-item">
+                    <div class="docs-quick-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    </div>
+                    <div class="docs-quick-info">
+                        <div class="docs-quick-name">Plantilla CUDOS</div>
+                        <div class="docs-quick-format">Excel · per omplir</div>
+                    </div>
+                    <svg class="docs-quick-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                </a>
+
+                <a href="recursos/carta-residus.docx" download class="docs-quick-item">
+                    <div class="docs-quick-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    </div>
+                    <div class="docs-quick-info">
+                        <div class="docs-quick-name">Carta de Residus</div>
+                        <div class="docs-quick-format">Word · per signar</div>
+                    </div>
+                    <svg class="docs-quick-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                </a>
+
+                <a href="recursos/carta-doble-us.docx" download class="docs-quick-item">
+                    <div class="docs-quick-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s-8-4.5-8-11.8A5.94 5.94 0 0 1 12 4a5.94 5.94 0 0 1 8 6.2c0 7.3-8 11.8-8 11.8z"/></svg>
+                    </div>
+                    <div class="docs-quick-info">
+                        <div class="docs-quick-name">Carta de Doble Ús</div>
+                        <div class="docs-quick-format">Word · per signar</div>
+                    </div>
+                    <svg class="docs-quick-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                </a>
+
+                <a href="recursos/carta-gases.docx" download class="docs-quick-item">
+                    <div class="docs-quick-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v6m0 0v8a4 4 0 1 0 4 4M12 8a4 4 0 0 1 4 4"/><circle cx="12" cy="20" r="2"/></svg>
+                    </div>
+                    <div class="docs-quick-info">
+                        <div class="docs-quick-name">Carta de Gasos</div>
+                        <div class="docs-quick-format">Word · per signar</div>
+                    </div>
+                    <svg class="docs-quick-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                </a>
+            </div>
+            <a href="recursos.html" class="docs-card-link">
+                Veure tots els recursos
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- LAYOUT PRINCIPAL -->
+    <div class="main-layout">
+        
+        <!-- CONTINGUT PRINCIPAL -->
+        <main class="content">
+            <div class="section-header-internal">
+                <span class="section-eyebrow">Procediment pas a pas</span>
+                <h2 class="section-title">Els 7 passos per gestionar un camió a UK</h2>
+                <p class="section-subtitle">
+                    Marca cada pas a mesura que l'anaves completant. El teu progrés es guarda automàticament al teu navegador. Pots clicar a qualsevol pas per expandir el detall.
+                </p>
+            </div>
+
+            <!-- ============================================
+                 PAS 1: FACTURACIÓ
+            ============================================ -->
+            <article class="step-card" data-step="1">
+                <div class="step-card-header">
+                    <div class="step-checkbox">
+                        <svg class="step-checkbox-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                    </div>
+                    <div class="step-card-info">
+                        <div class="step-card-meta">
+                            <span class="step-number-badge">1</span>
+                            <span class="step-tag tag-document">Documentació</span>
+                        </div>
+                        <h3 class="step-card-title">Facturar els albarans</h3>
+                        <p class="step-card-summary">Generar factures individuals per cada albarà amb la informació requerida pel client.</p>
+                    </div>
+                    <div class="step-toggle">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                    </div>
+                </div>
+                <div class="step-card-body">
+                    <div class="step-card-content">
+                        <h4>Què cal fer</h4>
+                        <p>Cada albarà ha de generar una factura individual. Cal assegurar-se que cada factura inclou tota la informació que el client requereix per al despatx duaner.</p>
+                        
+                        <h4>Informació obligatòria a cada factura</h4>
+                        <ul>
+                            <li>Codi <strong>HS</strong> (Harmonized System) del producte</li>
+                            <li>Origen del producte</li>
+                            <li>Text "UK" identificatiu</li>
+                            <li>Signatura del Quim (o foto de la signatura)</li>
+                            <li>Número del camió (exemple: <strong>TRUCK 5</strong>)</li>
+                        </ul>
+
+                        <div class="callout callout-warning">
+                            <div class="callout-icon">⚠️</div>
+                            <div class="callout-content">
+                                <div class="callout-title">Important</div>
+                                <div class="callout-text">No es pot agrupar diversos albarans en una sola factura. Cada albarà ha de tenir el seu propi document.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ============================================
+                 PAS 2: PLANTILLA CUDOS
+            ============================================ -->
+            <article class="step-card" data-step="2">
+                <div class="step-card-header">
+                    <div class="step-checkbox">
+                        <svg class="step-checkbox-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                    </div>
+                    <div class="step-card-info">
+                        <div class="step-card-meta">
+                            <span class="step-number-badge">2</span>
+                            <span class="step-tag tag-document">Documentació</span>
+                        </div>
+                        <h3 class="step-card-title">Preparar el document plantilla CUDOS</h3>
+                        <p class="step-card-summary">Descarregar la plantilla CUDOS i omplir-la amb les dades de cada factura.</p>
+                    </div>
+                    <div class="step-toggle">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                    </div>
+                </div>
+                <div class="step-card-body">
+                    <div class="step-card-content">
+                        <h4>Què cal fer</h4>
+                        <p>Descarregar la plantilla CUDOS en format Excel i omplir-la amb les dades de cada factura. Es genera <strong>un document CUDOS per cada factura</strong> (una per client/comanda).</p>
+
+                        <h4>Descarregar la plantilla</h4>
+                        <p>Descarrega la plantilla oficial directament des de la web o des del SharePoint corporatiu. No cal contactar amb ningú per obtenir-la.</p>
+                        
+                        <a href="recursos/plantilla-cudos.xlsx" download class="external-link">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                            Descarregar plantilla CUDOS (Excel)
+                        </a>
+
+                        <h4>Omplir la plantilla</h4>
+                        <p>Cal completar la plantilla en Excel amb les dades dels <strong>EANs i quantitats</strong> que indica cada factura. Recorda: una plantilla per cada client/comanda, no es barregen factures en un mateix document CUDOS.</p>
+
+                        <h4>Formats finals a generar</h4>
+                        <ul>
+                            <li>Una versió en <strong>PDF</strong> (per pujar a la plataforma CUDOS al pas 6)</li>
+                            <li>Una versió en <strong>Excel</strong> (s'envia a BUNZL UK juntament amb el PDF al pas 7, per requeriment del client al seu departament d'importació)</li>
+                        </ul>
+
+                        <div class="callout callout-info">
+                            <div class="callout-icon">ℹ️</div>
+                            <div class="callout-content">
+                                <div class="callout-title">No trobes algun producte a la plantilla?</div>
+                                <div class="callout-text">Si algun dels productes facturats no apareix a la plantilla, contacta amb <strong>Xavier</strong> per assegurar-te que la <strong>referència creuada</strong> està activada al sistema.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ============================================
+                 PAS 3: INFORMAR DADES A CUDOS
+            ============================================ -->
+            <article class="step-card" data-step="3">
+                <div class="step-card-header">
+                    <div class="step-checkbox">
+                        <svg class="step-checkbox-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                    </div>
+                    <div class="step-card-info">
+                        <div class="step-card-meta">
+                            <span class="step-number-badge">3</span>
+                            <span class="step-tag tag-document">Documentació</span>
+                        </div>
+                        <h3 class="step-card-title">Informar les dades de la factura a la còpia CUDOS</h3>
+                        <p class="step-card-summary">Introduir totes les dades pertinents al document CUDOS i ajustar el pes perquè coincideixi amb el TPE.</p>
+                    </div>
+                    <div class="step-toggle">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                    </div>
+                </div>
+                <div class="step-card-body">
+                    <div class="step-card-content">
+                        <h4>Dades a introduir</h4>
+                        <ul>
+                            <li>Unitats de cada producte</li>
+                            <li>Comanda del client</li>
+                            <li>Número de factura</li>
+                            <li>Quantitat de palets</li>
+                            <li>Pes de cada palet (per calcular el pes total del document)</li>
+                        </ul>
+
+                        <div class="callout callout-warning">
+                            <div class="callout-icon">⚠️</div>
+                            <div class="callout-content">
+                                <div class="callout-title">Crític: coincidència de pesos</div>
+                                <div class="callout-text">El pes de cada TPE ha de coincidir amb el pes total del seu document CUDOS corresponent (un TPE = un CUDOS = una factura). Per calcular-lo: indica el <strong>número de pallets</strong> i obtén el <strong>pes total</strong> resultant de la suma dels pallets més el pes brut dels productes.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ============================================
+                 PAS 4: GUARDAR DOCUMENTS
+            ============================================ -->
+            <article class="step-card" data-step="4">
+                <div class="step-card-header">
+                    <div class="step-checkbox">
+                        <svg class="step-checkbox-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                    </div>
+                    <div class="step-card-info">
+                        <div class="step-card-meta">
+                            <span class="step-number-badge">4</span>
+                            <span class="step-tag tag-document">Documentació</span>
+                        </div>
+                        <h3 class="step-card-title">Guardar el document CUDOS i el TPE</h3>
+                        <p class="step-card-summary">Desar les dues versions del CUDOS (PDF i Excel) i verificar la coincidència de pesos amb cada TPE.</p>
+                    </div>
+                    <div class="step-toggle">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                    </div>
+                </div>
+                <div class="step-card-body">
+                    <div class="step-card-content">
+                        <h4>Documents a desar per cada factura</h4>
+                        <ul>
+                            <li>Document CUDOS en format <strong>Excel</strong> (s'enviarà a BUNZL UK al pas 7)</li>
+                            <li>Document CUDOS en format <strong>PDF</strong> (es pujarà a la plataforma CUDOS al pas 6)</li>
+                            <li>TPE amb el pes coincident amb el seu document CUDOS corresponent</li>
+                        </ul>
+
+                        <div class="callout callout-tip">
+                            <div class="callout-icon">✓</div>
+                            <div class="callout-content">
+                                <div class="callout-title">Comprovació recomanada</div>
+                                <div class="callout-text">Abans de continuar al pas següent, comprova per cada factura que el pes del TPE coincideix amb el pes total del seu document CUDOS. Recorda: <strong>cada parella TPE-CUDOS és independent</strong>, no es comparen sumes globals.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ============================================
+                 PAS 5: CARTES I ENVIAMENT A HELLMANN
+            ============================================ -->
+            <article class="step-card" data-step="5">
+                <div class="step-card-header">
+                    <div class="step-checkbox">
+                        <svg class="step-checkbox-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                    </div>
+                    <div class="step-card-info">
+                        <div class="step-card-meta">
+                            <span class="step-number-badge">5</span>
+                            <span class="step-tag tag-communication">Comunicació</span>
+                        </div>
+                        <h3 class="step-card-title">Modificar i enviar cartes a Hellmann</h3>
+                        <p class="step-card-summary">Preparar les cartes específiques i enviar tota la documentació a Hellmann abans de declarar a CUDOS.</p>
+                    </div>
+                    <div class="step-toggle">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                    </div>
+                </div>
+                <div class="step-card-body">
+                    <div class="step-card-content">
+                        <h4>Cartes a preparar</h4>
+                        <p>Aquestes són les cartes que pot demanar la duana segons l'expedició. Tens-les totes disponibles a la secció de <a href="recursos.html" style="color: var(--color-uk); font-weight: 600;">recursos</a>:</p>
+                        <ul>
+                            <li>Carta de <strong>Residus</strong></li>
+                            <li>Carta de <strong>Doble Ús</strong></li>
+                            <li>Carta de <strong>Gasos</strong></li>
+                            <li>Document <strong>No-CITES</strong></li>
+                            <li>Document <strong>PQP</strong></li>
+                        </ul>
+
+                        <h4>Procés d'enviament</h4>
+                        <p>Enviar aquestes cartes juntament amb la resta de documentació a <strong>Hellmann</strong> abans de pujar la declaració a CUDOS. Així poden anar preparant l'expedició mentre nosaltres processem la declaració.</p>
+
+                        <div class="callout callout-info">
+                            <div class="callout-icon">ℹ️</div>
+                            <div class="callout-content">
+                                <div class="callout-title">Quan rebrem informació del camió?</div>
+                                <div class="callout-text">Hellmann ens enviarà les matrícules, ETA i <strong>ruta de trànsit</strong> (normalment Calais-Dover) quan carreguin al nostre magatzem. Aquesta informació és necessària per fer el pas següent (declaració a CUDOS).</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ============================================
+                 PAS 6: DECLARACIÓ A CUDOS
+            ============================================ -->
+            <article class="step-card" data-step="6">
+                <div class="step-card-header">
+                    <div class="step-checkbox">
+                        <svg class="step-checkbox-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                    </div>
+                    <div class="step-card-info">
+                        <div class="step-card-meta">
+                            <span class="step-number-badge">6</span>
+                            <span class="step-tag tag-platform">Plataforma</span>
+                        </div>
+                        <h3 class="step-card-title">Realitzar la declaració a CUDOS</h3>
+                        <p class="step-card-summary">Accedir a la plataforma CUDOS i pujar tota la documentació amb les dades del camió.</p>
+                    </div>
+                    <div class="step-toggle">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                    </div>
+                </div>
+                <div class="step-card-body">
+                    <div class="step-card-content">
+                        <h4>Accés a la plataforma</h4>
+                        <p>Accedir a la plataforma CUDOS a través del següent enllaç:</p>
+                        <a href="https://myvt.b2clogin.com/myvt.onmicrosoft.com/b2c_1a_signup_signin/oauth2/v2.0/authorize?client_id=b0e424d6-f83b-411c-b5a9-ca66d40607f5&scope=https%3A%2F%2Fmyvt.onmicrosoft.com%2F402e21fd-7b51-4b81-84ff-b98d6ff37eaf%2Faccess_as_user%20openid%20profile%20offline_access&redirect_uri=https%3A%2F%2Fcudos.myvisibilitytool.com%2Fauth&client-request-id=019e08f7-cf4c-7edf-9093-ee87e829c635&response_mode=fragment&response_type=code&x-client-SKU=msal.js.browser&x-client-VER=3.30.0&client_info=1&code_challenge=6HWXDVs3VSRehajPSGZ4LwdhjTWqDDb5Vh4yRe8j0jI&code_challenge_method=S256&nonce=019e08f7-cf4d-7bf4-9dbd-d8fddffe154f&state=eyJpZCI6IjAxOWUwOGY3LWNmNGQtNzNkMC1hNzA0LTI3NWU4OWJhOGE3NiIsIm1ldGEiOnsiaW50ZXJhY3Rpb25UeXBlIjoicmVkaXJlY3QifX0%3D" target="_blank" rel="noopener" class="external-link">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                            Obrir CUDOS
+                        </a>
+
+                        <h4>Credencials d'accés</h4>
+                        <dl class="credentials-table">
+                            <dt>Usuari:</dt>
+                            <dd>jordi.s@amenitiespack.com</dd>
+                            <dt>Contrasenya:</dt>
+                            <dd>123.Asdf</dd>
+                        </dl>
+
+                        <h4>Documents a pujar a la declaració</h4>
+                        <ul>
+                            <li>Factures signades (categoria: <strong>Commercial Invoice</strong>)</li>
+                            <li>Documents CUDOS (categoria: <strong>Other</strong>)</li>
+                            <li>TPE / Packing list (categoria: <strong>Packing List</strong>)</li>
+                        </ul>
+
+                        <h4>Informació a demanar al transportista</h4>
+                        <ul>
+                            <li><strong>Haulier/Carrier Booking Reference</strong></li>
+                            <li><strong>Vehicle / Trailer Number</strong></li>
+                            <li><strong>Arrival Date</strong> (port d'entrada i data de lliurament al client)</li>
+                            <li><strong>Carrier Details</strong></li>
+                        </ul>
+
+                        <div class="callout callout-tip">
+                            <div class="callout-icon">📋</div>
+                            <div class="callout-content">
+                                <div class="callout-title">Exemple TRUCK 5</div>
+                                <div class="callout-text">
+                                    <strong>Booking Reference:</strong> Clever Logistics<br>
+                                    <strong>Trailer Number:</strong> CB8957CX/CB0024EB<br>
+                                    <strong>Arrival:</strong> Calais 30.05 am – Delivery Friday 31.05 late am/early pm<br>
+                                    <strong>Carrier Details:</strong> EORI GB075081417000
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="callout callout-warning">
+                            <div class="callout-icon">⚠️</div>
+                            <div class="callout-content">
+                                <div class="callout-title">Últim pas de la declaració</div>
+                                <div class="callout-text">A l'últim camp de la declaració, indicar <strong>"unknown"</strong>.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ============================================
+                 PAS 7: AVISAR I COORDINAR ENTREGA
+            ============================================ -->
+            <article class="step-card" data-step="7">
+                <div class="step-card-header">
+                    <div class="step-checkbox">
+                        <svg class="step-checkbox-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                    </div>
+                    <div class="step-card-info">
+                        <div class="step-card-meta">
+                            <span class="step-number-badge">7</span>
+                            <span class="step-tag tag-communication">Comunicació</span>
+                        </div>
+                        <h3 class="step-card-title">Avisar BUNZL UK i Hellmann + confirmar booking</h3>
+                        <p class="step-card-summary">Notificar el registre de la declaració i coordinar la data d'entrega al magatzem.</p>
+                    </div>
+                    <div class="step-toggle">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                    </div>
+                </div>
+                <div class="step-card-body">
+                    <div class="step-card-content">
+                        <h4>Documents a enviar a BUNZL UK</h4>
+                        <ul>
+                            <li>Factures</li>
+                            <li>CUDOS en PDF</li>
+                            <li>CUDOS en Excel</li>
+                            <li>Packing list</li>
+                        </ul>
+
+                        <h4>Documents a enviar a Hellmann</h4>
+                        <ul>
+                            <li>Factures</li>
+                            <li>CUDOS en PDF</li>
+                            <li>Packing list</li>
+                            <li>Cartes que ens hagin demanat</li>
+                        </ul>
+
+                        <div class="callout callout-warning">
+                            <div class="callout-icon">⚠️</div>
+                            <div class="callout-content">
+                                <div class="callout-title">No enviar Excel a Hellmann</div>
+                                <div class="callout-text">Recordar que el document CUDOS en Excel només va a BUNZL UK, mai a Hellmann.</div>
+                            </div>
+                        </div>
+
+                        <h4>Confirmació final</h4>
+                        <p>Després de l'enviament, BUNZL UK ens enviarà una <strong>prereserva</strong> amb el dia del booking d'entrega. Si coincideix amb la data que Hellmann ens ha indicat, podem confirmar.</p>
+                        <p>Quan rebem el document <strong>CDS de METRO</strong>, cal reenviar-lo a l'<strong>agent de trànsit directe de Hellmann</strong> perquè confirmi també el booking.</p>
+
+                        <div class="callout callout-tip">
+                            <div class="callout-icon">⏱️</div>
+                            <div class="callout-content">
+                                <div class="callout-title">Antelació recomanada</div>
+                                <div class="callout-text">Realitzar tota aquesta coordinació amb la <strong>màxima antelació possible</strong>. Els bookings amb pocs dies d'antelació poden no estar disponibles a Tamworth.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ============================================
+                 SECCIÓ BONES PRÀCTIQUES
+                 Consells d'experiència que prevenen problemes habituals.
+            ============================================ -->
+            <section class="best-practices">
+                <div class="section-header-internal">
+                    <span class="section-eyebrow">Recomanacions de l'experiència</span>
+                    <h2 class="section-title">Bones pràctiques</h2>
+                    <p class="section-subtitle">
+                        Consells extrets de l'experiència del dia a dia que ajuden a evitar problemes habituals i a optimitzar la gestió dels camions.
+                    </p>
+                </div>
+
+                <div class="practices-grid">
+                    <article class="practice-card" data-number="1">
+                        <div class="practice-card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                        </div>
+                        <span class="practice-card-eyebrow">Coordinació del booking</span>
+                        <h3 class="practice-card-title">Confirma sempre la data per les dues parts</h3>
+                        <p class="practice-card-text">
+                            Abans de tancar una data de booking, assegura't d'obtenir <strong>confirmació explícita tant del client com de Hellmann</strong> que la data és òptima per ambdós. Un descoordinació aquí pot acabar amb el camió aturat al moll o amb una entrega que el client no està preparat per rebre.
+                        </p>
+                    </article>
+
+                    <article class="practice-card" data-number="2">
+                        <div class="practice-card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                        </div>
+                        <span class="practice-card-eyebrow">Previsió de magatzem</span>
+                        <h3 class="practice-card-title">Anticipa't preguntant al magatzem</h3>
+                        <p class="practice-card-text">
+                            Pregunta a magatzem la <strong>previsió exacta de quan tindran la mercaderia preparada</strong> per a cada expedició. Aquesta informació et permet planificar la càrrega amb antelació i evitar improvisacions d'última hora que poden afectar tot el calendari.
+                        </p>
+                    </article>
+
+                    <article class="practice-card" data-number="3">
+                        <div class="practice-card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        </div>
+                        <span class="practice-card-eyebrow">Antelació documental</span>
+                        <h3 class="practice-card-title">Registra CUDOS i booking com més aviat millor</h3>
+                        <p class="practice-card-text">
+                            El procés de <strong>registre a CUDOS i confirmació del booking amb el client</strong> s'ha de fer amb la <strong>màxima antelació possible</strong>. Els bookings tardans poden no estar disponibles, i els registres CUDOS d'última hora deixen menys marge per resoldre incidències.
+                        </p>
+                    </article>
+                </div>
+            </section>
+
+            <!-- ============================================
+                 SECCIÓ DE CONTACTES
+            ============================================ -->
+            <section class="contacts-section" id="contactes">
+                <div class="section-header-internal">
+                    <span class="section-eyebrow">Directori de contactes</span>
+                    <h2 class="section-title">Persones clau del procediment UK</h2>
+                    <p class="section-subtitle">
+                        Contactes principals a BUNZL UK i Hellmann. Clica sobre l'email per obrir directament el client de correu.
+                    </p>
+                </div>
+
+                <div class="contacts-grid">
+                    <div class="contact-card">
+                        <span class="contact-org">BUNZL UK</span>
+                        <div class="contact-name">Lizzie Brooks</div>
+                        <div class="contact-role">Goods In · Tamworth (BCS)</div>
+                        <a href="mailto:birchcoppice.goodsin@bunzl.co.uk" class="contact-email">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                            birchcoppice.goodsin@bunzl.co.uk
+                        </a>
+                    </div>
+
+                    <div class="contact-card">
+                        <span class="contact-org">BUNZL UK</span>
+                        <div class="contact-name">Departament d'Imports</div>
+                        <div class="contact-role">Gestió d'importacions</div>
+                        <a href="mailto:bcs.imports@bunzl.co.uk" class="contact-email">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                            bcs.imports@bunzl.co.uk
+                        </a>
+                    </div>
+
+                    <div class="contact-card">
+                        <span class="contact-org org-hellmann">Hellmann</span>
+                        <div class="contact-name">Henry Bustamante</div>
+                        <div class="contact-role">Operador logístic principal</div>
+                        <a href="mailto:henry.bustamante@hellmann.com" class="contact-email">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                            henry.bustamante@hellmann.com
+                        </a>
+                    </div>
+
+                    <div class="contact-card">
+                        <span class="contact-org org-hellmann">Hellmann</span>
+                        <div class="contact-name">Lucia Sanjurjo</div>
+                        <div class="contact-role">Operadora logística</div>
+                        <a href="mailto:Lucia.Sanjurjo@hellmann.com" class="contact-email">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                            Lucia.Sanjurjo@hellmann.com
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- SIDEBAR DE PROGRÉS -->
+        <aside class="sidebar">
+            <h3 class="sidebar-title">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                El teu progrés
+            </h3>
+
+            <div class="progress-circle-wrapper">
+                <div class="progress-circle">
+                    <svg width="70" height="70" viewBox="0 0 70 70">
+                        <circle class="progress-circle-bg" cx="35" cy="35" r="30"/>
+                        <circle class="progress-circle-fill" cx="35" cy="35" r="30" 
+                                stroke-dasharray="188.5" stroke-dashoffset="188.5" 
+                                id="progressFill"/>
+                    </svg>
+                    <div class="progress-circle-text" id="progressText">0%</div>
+                </div>
+                <div>
+                    <div class="progress-info-label">Passos completats</div>
+                    <div class="progress-info-value"><span id="completedCount">0</span> de 7</div>
+                </div>
+            </div>
+
+            <ul class="step-jumps" id="stepJumps">
+                <li><a href="#" class="step-jump" data-step-jump="1"><span class="step-jump-number"><span>1</span></span>Facturar albarans</a></li>
+                <li><a href="#" class="step-jump" data-step-jump="2"><span class="step-jump-number"><span>2</span></span>Plantilla CUDOS</a></li>
+                <li><a href="#" class="step-jump" data-step-jump="3"><span class="step-jump-number"><span>3</span></span>Informar dades</a></li>
+                <li><a href="#" class="step-jump" data-step-jump="4"><span class="step-jump-number"><span>4</span></span>Guardar documents</a></li>
+                <li><a href="#" class="step-jump" data-step-jump="5"><span class="step-jump-number"><span>5</span></span>Cartes a Hellmann</a></li>
+                <li><a href="#" class="step-jump" data-step-jump="6"><span class="step-jump-number"><span>6</span></span>Declaració CUDOS</a></li>
+                <li><a href="#" class="step-jump" data-step-jump="7"><span class="step-jump-number"><span>7</span></span>Avisar i confirmar</a></li>
+            </ul>
+
+            <button class="reset-btn" id="resetBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+                Reiniciar progrés
+            </button>
+        </aside>
+    </div>
+
+    <!-- CELEBRACIÓ -->
+    <div class="celebration" id="celebration">
+        <span style="font-size: 1.5rem;">🎉</span>
+        <span>Procediment completat! Bona feina.</span>
+    </div>
+
+    <!-- BOTÓ TORNAR A DALT -->
+    <button class="back-to-top" id="backToTop" aria-label="Tornar a dalt">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+    </button>
+
+    <!-- PEU DE PÀGINA -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div>
+                <div class="footer-brand">
+                    <div class="logo-mark">A</div>
+                    <span>Amenities Pack</span>
+                </div>
+                <p class="footer-tagline">
+                    Plataforma interna del departament d'exportacions. Una eina feta per a l'equip per garantir que cada enviament arriba al destí sense incidències documentals.
+                </p>
+            </div>
+
+            <div>
+                <h4 class="footer-col-title">Procediments</h4>
+                <ul class="footer-links">
+                    <li><a href="uk.html">Regne Unit</a></li>
+                    <li><a href="#">Noruega</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="footer-col-title">Recursos</h4>
+                <ul class="footer-links">
+                    <li><a href="recursos.html">Plantilles</a></li>
+                    <li><a href="#contactes">Contactes</a></li>
+                    <li><a href="#">Glossari</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="footer-col-title">Suport</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Preguntes freqüents</a></li>
+                    <li><a href="#">Contacte</a></li>
+                    <li><a href="#">Suggeriments</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 Amenities Pack · Plataforma interna · Versió 1.1 · Maig 2026</p>
+        </div>
+    </footer>
+
+    <!-- ============================================
+         JAVASCRIPT
+    ============================================ -->
+    <script>
+        /**
+         * 1. EFECTE SCROLL HEADER
+         */
+        const header = document.getElementById('header');
+        const backToTop = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+            
+            // Mostrar/amagar botó "tornar a dalt"
+            if (window.scrollY > 600) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        /**
+         * 2. SISTEMA DE CHECKLIST PERSISTENT
+         * 
+         * Aquesta és la part més interessant tècnicament.
+         * Faig servir localStorage per guardar quins passos ha 
+         * completat l'usuari. localStorage és una memòria petita
+         * que el navegador té al teu propi ordinador, així que 
+         * cada usuari té el seu propi progrés sense necessitat
+         * de comptes ni servidors.
+         * 
+         * La clau "uk-progress" identifica els passos d'aquesta 
+         * pàgina. Quan creem la de Noruega, farem servir 
+         * "noruega-progress", etc. Així cada país té el seu 
+         * propi progrés independent.
+         */
+        const STORAGE_KEY = 'amenities-uk-progress';
+        const TOTAL_STEPS = 7;
+
+        // Carrega l'estat guardat (o crea un objecte buit si no n'hi ha)
+        function loadProgress() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                return saved ? JSON.parse(saved) : {};
+            } catch (e) {
+                console.error('Error carregant el progrés:', e);
+                return {};
+            }
+        }
+
+        // Guarda l'estat al localStorage
+        function saveProgress(progress) {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+            } catch (e) {
+                console.error('Error guardant el progrés:', e);
+            }
+        }
+
+        // Actualitza la interfície segons l'estat actual
+        function updateUI() {
+            const progress = loadProgress();
+            const completedSteps = Object.keys(progress).filter(k => progress[k]).length;
+            
+            // Actualitzar cada targeta
+            document.querySelectorAll('.step-card').forEach(card => {
+                const stepNum = card.dataset.step;
+                if (progress[stepNum]) {
+                    card.classList.add('completed');
+                } else {
+                    card.classList.remove('completed');
+                }
+            });
+
+            // Actualitzar el sidebar
+            document.querySelectorAll('.step-jump').forEach(jump => {
+                const stepNum = jump.dataset.stepJump;
+                if (progress[stepNum]) {
+                    jump.classList.add('completed');
+                } else {
+                    jump.classList.remove('completed');
+                }
+            });
+
+            // Actualitzar la barra de progrés circular
+            const percentage = Math.round((completedSteps / TOTAL_STEPS) * 100);
+            const circumference = 188.5; // 2 * π * r (r=30)
+            const offset = circumference - (circumference * percentage / 100);
+            
+            document.getElementById('progressFill').style.strokeDashoffset = offset;
+            document.getElementById('progressText').textContent = percentage + '%';
+            document.getElementById('completedCount').textContent = completedSteps;
+
+            // Si l'usuari ha completat tots els passos, celebració!
+            if (completedSteps === TOTAL_STEPS) {
+                showCelebration();
+            }
+        }
+
+        // Mostra el missatge de celebració durant 3 segons
+        function showCelebration() {
+            const celebration = document.getElementById('celebration');
+            celebration.classList.add('show');
+            setTimeout(() => {
+                celebration.classList.remove('show');
+            }, 3500);
+        }
+
+        // Toggle del checkbox d'un pas
+        function toggleStep(stepNum) {
+            const progress = loadProgress();
+            progress[stepNum] = !progress[stepNum];
+            saveProgress(progress);
+            updateUI();
+        }
+
+        /**
+         * 3. INTERACCIONS DELS PASSOS
+         * Diferenciem entre clicar el checkbox (marcar/desmarcar)
+         * i clicar la resta de la targeta (expandir/contraure).
+         */
+        document.querySelectorAll('.step-card').forEach(card => {
+            const header = card.querySelector('.step-card-header');
+            const checkbox = card.querySelector('.step-checkbox');
+            const stepNum = card.dataset.step;
+
+            // Click al checkbox: marcar/desmarcar
+            checkbox.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleStep(stepNum);
+            });
+
+            // Click a la resta de la capçalera: expandir/contraure
+            header.addEventListener('click', (e) => {
+                if (e.target.closest('.step-checkbox')) return;
+                card.classList.toggle('expanded');
+            });
+        });
+
+        /**
+         * 4. SALTS RÀPIDS DEL SIDEBAR
+         * Quan cliques un pas al sidebar, fa scroll fins a la 
+         * targeta corresponent i l'expandeix automàticament.
+         */
+        document.querySelectorAll('.step-jump').forEach(jump => {
+            jump.addEventListener('click', (e) => {
+                e.preventDefault();
+                const stepNum = jump.dataset.stepJump;
+                const card = document.querySelector(`.step-card[data-step="${stepNum}"]`);
+                if (card) {
+                    card.classList.add('expanded');
+                    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        /**
+         * 5. REINICIAR PROGRÉS
+         * Confirma abans de fer-ho per evitar pèrdues accidentals.
+         */
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            if (confirm('Estàs segur que vols reiniciar el teu progrés? Aquesta acció esborrarà totes les marques de passos completats.')) {
+                localStorage.removeItem(STORAGE_KEY);
+                updateUI();
+            }
+        });
+
+        /**
+         * 6. INICIALITZACIÓ
+         * Quan la pàgina carrega, recuperem l'estat guardat 
+         * i actualitzem la UI.
+         */
+        updateUI();
+
+        /**
+         * 7. MISSATGE DE CONSOLA
+         */
+        console.log('%c🇬🇧 Procediment UK carregat', 'font-size: 16px; font-weight: bold; color: #c53030;');
+        console.log('%cEl progrés es guarda automàticament al teu navegador. Pots tornar quan vulguis i continuar on ho vas deixar.', 'color: #4a5568;');
+    </script>
+
+</body>
+</html>
